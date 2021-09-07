@@ -33,8 +33,8 @@ const App = () => {
   return (
     <div>
       <h1>Hello</h1>
-      <input placeholder="Name" {...name} />{" "}
-      {/* == value={name.value} onChange={name.onChange}*/}
+      <input placeholder="Name" {...name} />
+      {/* === value={name.value} onChange={name.onChange}*/}
     </div>
   );
 }
