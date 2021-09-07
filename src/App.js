@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
-const useInput = (initialValue, validator) => {
+const useInput = (initialValue, validatorOne, validatorTwo) => {
   const [value, setValue] = useState(initialValue);
 
   const onChange = (event) => {
@@ -12,13 +12,19 @@ const useInput = (initialValue, validator) => {
 
     let willUpdate = true;
 
-    if (typeof validator === "function") {          // vali의 타입이 펑션인가?
-      willUpdate = validator(value);                // 펑션이라면  willUpdate의 타입을 vali가 가진 boolean 값으로 변경
-      console.log(willUpdate, validator);           // maxLen === validator
+    let confirmLen = validatorOne(value);
+    let confirmWord = validatorTwo(value);
+    
+
+    if (typeof validatorOne && validatorTwo === "function") {          // vali의 타입이 펑션인가?
+      willUpdate = confirmLen && confirmWord;
+                                                  // 펑션이라면  willUpdate의 타입을 vali가 가진 boolean 값으로 변경
+                                                  // maxLen === validator
     }
 
     if (willUpdate) {
       setValue(value); // willUpdate가 True라면 value를 업데이트
+      console.log(confirmLen, confirmWord, willUpdate);
     }
   };
 
@@ -27,8 +33,9 @@ const useInput = (initialValue, validator) => {
 
 const App = () => {
   const maxLen = (value) => value.length <= 10; // 길이 제한 함수
+  const restrict_Word = (value) => !value.includes("@");
 
-  const name = useInput("Mr.", maxLen); /* useInput의 value는 Mr. 가 되고, name은 value 값을 갖게 됨
+  const name = useInput("Mr.", maxLen, restrict_Word); /* useInput의 value는 Mr. 가 되고, name은 value 값을 갖게 됨
                                            maxLen으로 길이 제한 */
   return (
     <div>
